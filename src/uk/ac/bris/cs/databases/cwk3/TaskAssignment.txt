@@ -1,0 +1,4 @@
+Task 1:
+Berk: getUsers()   &   getSimpleForums()
+Simon: getPersonView()     &    countPostsInTopic()
+Neil:  getLikers()     &    getSimpleTopic()
