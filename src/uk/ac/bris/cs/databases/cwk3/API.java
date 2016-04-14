@@ -30,7 +30,7 @@ public class API implements APIProvider {
 
     @Override
     public Result<Map<String, String>> getUsers() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        System.out.println("Hello");
     }
 
     @Override
