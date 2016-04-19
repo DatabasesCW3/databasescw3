@@ -74,7 +74,24 @@ public class API implements APIProvider {
 
     @Override
     public Result<List<PersonView>> getLikers(long topicId) {
-        throw new UnsupportedOperationException("Not supported yet.");
+      List<PersonView> pvList = new ArrayList<PersonView>();
+      final String SQL = "SELECT name, username, stuId FROM User WHERE uname = ?";
+
+      try (PreparedStatement p = c.prepareStatement(SQL)) {
+        p.setString(1, topicId);
+        ResultSet r = p.executeQuery();
+
+        while (r.next()) {
+          String name = r.getString("name");
+          String username = r.getString("username");
+          String stuId = r.getString("stuId");
+          PersonView pv = new PersonView(name, username, stuId);
+          pvList.add(pv);
+        }
+        return Result.success(pvList);
+      } catch (SQLException e) {
+        return Result.fatal("Something bad happened: " + e);
+      }
     }
 
     @Override
