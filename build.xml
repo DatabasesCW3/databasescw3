@@ -1,23 +1,70 @@
 <project default="compile">
     <path id="libs">
         <fileset dir="lib">
-            <include name="*.jar" />
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+    <path id="testlibs">
+        <fileset dir="testlib">
+            <include name="*.jar"/>
         </fileset>
     </path>
     <target name="compile">
         <mkdir dir="target"/>
         <javac srcdir="src" destdir="target">
-            <classpath refid="libs" />
+            <classpath refid="libs"/>
         </javac>
     </target>
-    <target name="run">
+    <target name="run" depends="compile">
         <java classname="uk.ac.bris.cs.databases.web.Server">
             <classpath>
                 <fileset dir="lib">
-                    <include name="*.jar" />
+                    <include name="*.jar"/>
                 </fileset>
-                <pathelement path="target" />
+                <pathelement path="target"/>
             </classpath>
         </java>
+    </target>
+
+    <target name="testcompile" depends="compile">
+        <mkdir dir="testclasses"/>
+        <javac srcdir="test" destdir="testclasses">
+            <classpath refid="libs"/>
+            <classpath refid="testlibs"/>
+            <classpath path="target"/>
+        </javac>
+    </target>
+
+    <target name="test" depends="compile,testcompile">
+        <mkdir dir="reports"/>
+
+        <path id="testclasspath">
+            <fileset dir="lib">
+                <include name="*.jar"/>
+            </fileset>
+            <fileset dir="testlib">
+                <include name="*.jar"/>
+            </fileset>
+            <pathelement path="testclasses"/>
+            <pathelement path="target"/>
+        </path>
+
+        <!--
+        <property name="myclasspath" refid="testclasspath"/>
+        <echo message="Classpath = ${myclasspath}"/>
+        -->
+
+        <junit printsummary="yes" haltonfailure="no">
+            <classpath refid="testclasspath"/>
+
+            <formatter type="plain"/>
+
+            <batchtest fork="yes" todir="reports">
+                <fileset dir="test">
+                    <include name="**/*Test.java"/>
+                </fileset>
+            </batchtest>
+
+        </junit>
     </target>
 </project>

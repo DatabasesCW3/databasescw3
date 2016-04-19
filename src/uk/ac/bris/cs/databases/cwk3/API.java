@@ -6,6 +6,10 @@
 package uk.ac.bris.cs.databases.cwk3;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import uk.ac.bris.cs.databases.api.APIProvider;
@@ -35,7 +39,22 @@ public class API implements APIProvider {
 
     @Override
     public Result<Map<String, String>> getUsers() {
-        System.out.println("Hello");
+        final String statement = "SELECT * FROM Person";
+        Map<String, String> users = new HashMap<>();
+
+        try(PreparedStatement p = c.prepareStatement(statement)) {
+            ResultSet results = p.executeQuery();
+            while (results.next()) {
+                String username = results.getString("username");
+                String name = results.getString("name");
+
+                users.put(username, name);
+            }
+            results.close();
+            return Result.success(users);
+        } catch (SQLException e) {
+            return Result.fatal(e.getMessage());
+        }
     }
 
     @Override

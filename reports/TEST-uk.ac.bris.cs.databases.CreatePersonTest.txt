@@ -1,0 +1,10 @@
+Testsuite: uk.ac.bris.cs.databases.CreatePersonTest
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.443 sec
+
+Testcase: testCreatePerson took 0.373 sec
+	Caused an ERROR
+Not supported yet.
+java.lang.UnsupportedOperationException: Not supported yet.
+	at uk.ac.bris.cs.databases.cwk3.API.addNewPerson(Unknown Source)
+	at uk.ac.bris.cs.databases.CreatePersonTest.testCreatePerson(Unknown Source)
+
