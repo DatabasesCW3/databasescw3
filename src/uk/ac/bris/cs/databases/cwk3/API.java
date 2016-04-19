@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import uk.ac.bris.cs.databases.api.APIProvider;
 import uk.ac.bris.cs.databases.api.AdvancedForumSummaryView;
@@ -75,10 +76,11 @@ public class API implements APIProvider {
     @Override
     public Result<List<PersonView>> getLikers(long topicId) {
       List<PersonView> pvList = new ArrayList<PersonView>();
-      final String SQL = "SELECT name, username, stuId FROM User WHERE uname = ?";
+      final String SQL = "SELECT name, username, stuId FROM Person, LikesTopic"
+                       + " WHERE Person.id = user AND topic = ? ;";
 
       try (PreparedStatement p = c.prepareStatement(SQL)) {
-        p.setString(1, topicId);
+        p.setLong(1, topicId);
         ResultSet r = p.executeQuery();
 
         while (r.next()) {
@@ -90,7 +92,7 @@ public class API implements APIProvider {
         }
         return Result.success(pvList);
       } catch (SQLException e) {
-        return Result.fatal("Something bad happened: " + e);
+        return Result.fatal(e.getMessage());
       }
     }
 
