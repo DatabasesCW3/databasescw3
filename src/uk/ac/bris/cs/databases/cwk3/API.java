@@ -1,17 +1,15 @@
-
-
-
-
-
 package uk.ac.bris.cs.databases.cwk3;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import sun.java2d.pipe.SpanShapeRenderer;
 import uk.ac.bris.cs.databases.api.APIProvider;
 import uk.ac.bris.cs.databases.api.AdvancedForumSummaryView;
 import uk.ac.bris.cs.databases.api.AdvancedForumView;
@@ -64,7 +62,23 @@ public class API implements APIProvider {
 
     @Override
     public Result<List<SimpleForumSummaryView>> getSimpleForums() {
-        throw new UnsupportedOperationException("Not supported yet.");
+//        throw new UnsupportedOperationException("Not supported yet.");
+        final String statement = "SELECT * FROM Forum ORDER BY 'title'";
+        List<SimpleForumSummaryView> forums = new ArrayList<>();
+
+        try(PreparedStatement p = c.prepareStatement(statement)) {
+            ResultSet results = p.executeQuery();
+            while (results.next()) {
+                long id = results.getLong("id");
+                String title = results.getString("title");
+                SimpleForumSummaryView forum = new SimpleForumSummaryView(id, title);
+                forums.add(forum);
+            }
+            results.close();
+            return Result.success(forums);
+        } catch (SQLException e) {
+            return Result.fatal(e.getMessage());
+        }
     }
 
     @Override
