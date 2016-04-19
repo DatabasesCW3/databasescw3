@@ -63,7 +63,7 @@ public class API implements APIProvider {
     @Override
     public Result<List<SimpleForumSummaryView>> getSimpleForums() {
 //        throw new UnsupportedOperationException("Not supported yet.");
-        final String statement = "SELECT * FROM Forum ORDER BY 'title'";
+        final String statement = "SELECT * FROM Forum ORDER BY title";
         List<SimpleForumSummaryView> forums = new ArrayList<>();
 
         try(PreparedStatement p = c.prepareStatement(statement)) {

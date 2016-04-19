@@ -1,0 +1,7 @@
+Testsuite: uk.ac.bris.cs.databases.GetSimpleForumsTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.137 sec
+------------- Standard Output ---------------
+[]
+------------- ---------------- ---------------
+
+Testcase: testGetSimpleForums took 0.123 sec
