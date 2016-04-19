@@ -17,11 +17,11 @@ import uk.ac.bris.cs.databases.cwk3.DBSetup;
  * @author csxdb
  */
 public abstract class TestBase {
-    
-    private static final String TEST_DATABASE = "jdbc:sqlite::memory:";
+
+    private static final String TEST_DATABASE = "jdbc:sqlite:database/testdb.sqlite3";
     Connection c;
     APIProvider api;
-    
+
     /**
      * Check that a particular operation returns failure, not success or fatal.
      */
@@ -29,7 +29,7 @@ public abstract class TestBase {
         assertFalse(r.isSuccess());
         assertFalse(r.isFatal());
     }
-    
+
     /**
      * Wrap an API call to ensure that it succeeds.
      * @param in The result of the call.
@@ -39,7 +39,7 @@ public abstract class TestBase {
         assertTrue(in.isSuccess());
         return in.getValue();
     }
-    
+
     @Before
     public void setUp() {
         //System.err.println("Setting up test database");
@@ -52,7 +52,7 @@ public abstract class TestBase {
             throw new RuntimeException(e);
         }
     }
-    
+
     @After
     public void tearDown() {
         //System.err.println("Removing test database");
@@ -63,5 +63,5 @@ public abstract class TestBase {
             throw new RuntimeException(e);
         }
     }
-    
+
 }
