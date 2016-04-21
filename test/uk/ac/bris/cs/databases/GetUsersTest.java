@@ -12,8 +12,13 @@ public class GetUsersTest extends TestBase {
     @Test
     public void testGetUsers() {
         Map<String, String> users = ok(api.getUsers());
-        assertTrue(users.isEmpty());
+        assertFalse(users.isEmpty());
+        assertEquals(null, 5, users.size());
 
+        String name = users.get("uname 2");
+        assertEquals("testperson 2", name);
+
+        assertNull(users.get("uname 6"));
         // Must test the method after adding users, once the addNewPerson method has been added
     }
 }
