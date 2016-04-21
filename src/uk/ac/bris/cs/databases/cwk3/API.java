@@ -198,9 +198,9 @@ public class API implements APIProvider {
 
     @Override
     public Result<List<ForumSummaryView>> getForums(){
-      final String statement = " SELECT Forum.id AS fid, Forum.title AS ftitle,"
+      final String statement = " SELECT Forum.id AS fid, Forum.title AS fTitle,"
                              + " Topic.id AS tid,"
-                             + " Topic.title AS ttitle, postedAt"
+                             + " Topic.title AS tTitle, postedAt"
                              + " FROM (Forum LEFT JOIN Topic"
                              + " ON Forum.id = Topic.forum)"
                              + " LEFT JOIN Post ON Topic.id = Post.topic"
@@ -212,9 +212,9 @@ public class API implements APIProvider {
         ResultSet r = p.executeQuery();
         while (r.next()) {
           long id = r.getLong("fid");
-          String title = r.getString("ftitle");
+          String title = r.getString("fTitle");
           long topicId = r.getLong("tid");
-          String topicTitle = r.getString("tttitle");
+          String topicTitle = r.getString("tTitle");
           SimpleTopicSummaryView topic = new SimpleTopicSummaryView(topicId, id, topicTitle);
           ForumSummaryView forum = new ForumSummaryView(id, title, topic);
           forums.add(forum);

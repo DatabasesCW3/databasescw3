@@ -24,6 +24,6 @@ public class GetLikersTest extends TestBase {
   }
 
   @Test public void testFail() {
-    mustfail(api.getLikers(3));
+    mustfail(api.getLikers(3450));
   }
 }
