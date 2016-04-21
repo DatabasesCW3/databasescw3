@@ -1,8 +1,3 @@
-
-
-
-
-
 package uk.ac.bris.cs.databases.cwk3;
 
 import java.sql.Connection;
