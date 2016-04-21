@@ -133,13 +133,11 @@ public class API implements APIProvider {
         while (r.next()) {
           Integer postedAt = r.getInt("postedAt");
           Integer postNumber = r.getInt("postNumber");
-          String user = r.getString("Post.user");
-          String body = r.getString("Post.body");
-          if (!r.wasNull()) {
-            SimplePostView pview = new SimplePostView(postNumber, user, body,
-                                                      postedAt);
-            postList.add(pview);
-          }
+          String user = r.getString("user");
+          String body = r.getString("body");
+          SimplePostView pview = new SimplePostView(postNumber, user, body,
+                                                    postedAt);
+          postList.add(pview);
           title = r.getString("title");
         }
         SimpleTopicView tview = new SimpleTopicView(topicId, title, postList);

@@ -14,7 +14,7 @@ public class GetSimpleTopicTest extends TestBase {
     SimpleTopicView topic = ok(api.getSimpleTopic(1));
     List<SimplePostView> posts = topic.getPosts();
     int i = 0;
-    assertEquals(5, posts.size());
+    assertEquals(4, posts.size());
 
     for (SimplePostView post: posts) {
       i++;

@@ -26,7 +26,7 @@ CREATE TABLE Topic (
   id INTEGER PRIMARY KEY,
   user INTEGER REFERENCES Person(id),
   title VARCHAR(100) NOT NULL,
-  firstPost INTEGER REFERENCES Post(id)
+  forum INTEGER REFERENCES Forum(id)
 );
 
 CREATE TABLE Forum (
