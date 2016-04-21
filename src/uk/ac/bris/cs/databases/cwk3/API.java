@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import sun.java2d.pipe.SpanShapeRenderer;
 import uk.ac.bris.cs.databases.api.APIProvider;
 import uk.ac.bris.cs.databases.api.AdvancedForumSummaryView;
 import uk.ac.bris.cs.databases.api.AdvancedForumView;
@@ -57,7 +56,24 @@ public class API implements APIProvider {
 
     @Override
     public Result<PersonView> getPersonView(String username) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        final String statement = "SELECT * FROM Person WHERE username = ?";
+
+        try(PreparedStatement p = c.prepareStatement(statement)) {
+            p.setString(1, username);
+            ResultSet results = p.executeQuery();
+            if (results.next()) {
+                String name = results.getString("name");
+                String studentId = results.getString("stuId");
+
+                PersonView pv = new PersonView(name, username, studentId);
+                results.close();
+                return Result.success(pv);
+            } else {
+                return Result.failure("Person does not exist!");
+            }
+        } catch (SQLException e) {
+            return Result.fatal(e.getMessage());
+        }
     }
 
     @Override
@@ -83,7 +99,21 @@ public class API implements APIProvider {
 
     @Override
     public Result<Integer> countPostsInTopic(long topicId) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        final String statement = "SELECT COUNT(*) FROM Post WHERE Topic = ?";
+
+        try(PreparedStatement p = c.prepareStatement(statement)) {
+            p.setLong(1, topicId);
+            ResultSet results = p.executeQuery();
+            if (results.next()) {
+                int numRows = results.getInt(1);
+                results.close();
+                return Result.success(numRows);
+            } else  {
+                return Result.failure("There is no topic with that ID");
+            }
+        } catch (SQLException e) {
+            return Result.fatal(e.getMessage());
+        }
     }
 
     @Override

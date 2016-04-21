@@ -1,4 +1,4 @@
 Testsuite: uk.ac.bris.cs.databases.GetUsersTest
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.14 sec
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.134 sec
 
-Testcase: testGetUsers took 0.127 sec
+Testcase: testGetUsers took 0.121 sec
