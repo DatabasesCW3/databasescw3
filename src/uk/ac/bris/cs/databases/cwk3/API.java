@@ -62,12 +62,13 @@ public class API implements APIProvider {
 
         try(PreparedStatement p = c.prepareStatement(statement)) {
             p.setString(1, username);
+			
             ResultSet results = p.executeQuery();
             if (results.next()) {
                 String name = results.getString("name");
                 String studentId = results.getString("stuId");
-
                 PersonView pv = new PersonView(name, username, studentId);
+				
                 results.close();
                 return Result.success(pv);
             } else {
@@ -80,7 +81,6 @@ public class API implements APIProvider {
 
     @Override
     public Result<List<SimpleForumSummaryView>> getSimpleForums() {
-//        throw new UnsupportedOperationException("Not supported yet.");
         final String statement = "SELECT * FROM Forum ORDER BY title";
         List<SimpleForumSummaryView> forums = new ArrayList<>();
 
@@ -105,9 +105,11 @@ public class API implements APIProvider {
 
         try(PreparedStatement p = c.prepareStatement(statement)) {
             p.setLong(1, topicId);
+			
             ResultSet results = p.executeQuery();
             if (results.next()) {
                 int numRows = results.getInt(1);
+				
                 results.close();
                 return Result.success(numRows);
             } else  {
