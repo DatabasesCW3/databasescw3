@@ -101,20 +101,21 @@ public class API implements APIProvider {
 
     @Override
     public Result<Integer> countPostsInTopic(long topicId) {
-        final String statement = "SELECT COUNT(*) FROM Post WHERE Topic = ?";
+        final String statement = "SELECT COUNT(*) AS cnt FROM Post WHERE Topic = ?";
 
         try(PreparedStatement p = c.prepareStatement(statement)) {
             p.setLong(1, topicId);
 			
             ResultSet results = p.executeQuery();
             if (results.next()) {
-                int numRows = results.getInt(1);
+                int numRows = results.getInt("cnt");
 				
                 results.close();
-                return Result.success(numRows);
-            } else  {
-                return Result.failure("There is no topic with that ID");
+				if (numRows > 0) {
+					return Result.success(numRows);
+				}
             }
+            return Result.failure("There is no topic with that ID");
         } catch (SQLException e) {
             return Result.fatal(e.getMessage());
         }
