@@ -1,12 +1,6 @@
 Testsuite: uk.ac.bris.cs.databases.GetLikersTest
-Tests run: 3, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.372 sec
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.398 sec
 
-Testcase: testFail took 0.323 sec
-	FAILED
-null
-junit.framework.AssertionFailedError
-	at uk.ac.bris.cs.databases.TestBase.mustfail(Unknown Source)
-	at uk.ac.bris.cs.databases.GetLikersTest.testFail(Unknown Source)
-
-Testcase: testEmptySuccess took 0.002 sec
-Testcase: testSuccess took 0.006 sec
+Testcase: testFail took 0.355 sec
+Testcase: testEmptySuccess took 0.003 sec
+Testcase: testSuccess took 0.002 sec

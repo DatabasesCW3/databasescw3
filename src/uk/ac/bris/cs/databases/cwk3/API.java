@@ -73,22 +73,35 @@ public class API implements APIProvider {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    // A valid topic with no likes will return 1 row, with Topic.id,
+    // and null values for the other cols.
+    // An invalid topic will return no rows.
     @Override
     public Result<List<PersonView>> getLikers(long topicId) {
       List<PersonView> pvList = new ArrayList<PersonView>();
-      final String SQL = "SELECT name, username, stuId FROM Person, LikesTopic"
-                       + " WHERE Person.id = user AND topic = ? ;";
+      final String SQL = " SELECT Topic.id, name, username, stuId"
+                       + " FROM Topic LEFT JOIN"
+                       + " (LikesTopic INNER JOIN Person"
+                       + " ON LikesTopic.User = Person.id)"
+                       + " ON Topic.id = topic"
+                       + " WHERE Topic.id = ? ;";
 
       try (PreparedStatement p = c.prepareStatement(SQL)) {
         p.setLong(1, topicId);
         ResultSet r = p.executeQuery();
 
+        if (!r.isBeforeFirst() ) {
+          return Result.failure("No such topic.");
+        }
+
         while (r.next()) {
+          String stuId = r.getString("stuId");
           String name = r.getString("name");
           String username = r.getString("username");
-          String stuId = r.getString("stuId");
-          PersonView pv = new PersonView(name, username, stuId);
-          pvList.add(pv);
+          if (!r.wasNull()) {
+            PersonView pv = new PersonView(name, username, stuId);
+            pvList.add(pv);
+          }
         }
         return Result.success(pvList);
       } catch (SQLException e) {
