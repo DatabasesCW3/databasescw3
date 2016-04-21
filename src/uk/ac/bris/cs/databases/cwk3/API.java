@@ -20,6 +20,7 @@ import uk.ac.bris.cs.databases.api.PostView;
 import uk.ac.bris.cs.databases.api.Result;
 import uk.ac.bris.cs.databases.api.PersonView;
 import uk.ac.bris.cs.databases.api.SimpleForumSummaryView;
+import uk.ac.bris.cs.databases.api.SimpleTopicSummaryView;
 import uk.ac.bris.cs.databases.api.SimpleTopicView;
 import uk.ac.bris.cs.databases.api.SimplePostView;
 import uk.ac.bris.cs.databases.api.TopicView;
@@ -80,7 +81,6 @@ public class API implements APIProvider {
 
     @Override
     public Result<List<SimpleForumSummaryView>> getSimpleForums() {
-//        throw new UnsupportedOperationException("Not supported yet.");
         final String statement = "SELECT * FROM Forum ORDER BY title";
         List<SimpleForumSummaryView> forums = new ArrayList<>();
 
@@ -197,8 +197,32 @@ public class API implements APIProvider {
     }
 
     @Override
-    public Result<List<ForumSummaryView>> getForums() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Result<List<ForumSummaryView>> getForums(){
+      final String statement = " SELECT Forum.id AS fid, Forum.title AS ftitle,"
+                             + " Topic.id AS tid,"
+                             + " Topic.title AS ttitle, postedAt"
+                             + " FROM (Forum LEFT JOIN Topic"
+                             + " ON Forum.id = Topic.forum)"
+                             + " LEFT JOIN Post ON Topic.id = Post.topic"
+                             + " WHERE Forum.id = 1"
+                             + " ORDER BY postedAt DESC LIMIT 1;";
+      List<ForumSummaryView> forums = new ArrayList<>();
+
+      try(PreparedStatement p = c.prepareStatement(statement)) {
+        ResultSet r = p.executeQuery();
+        while (r.next()) {
+          long id = r.getLong("fid");
+          String title = r.getString("ftitle");
+          long topicId = r.getLong("tid");
+          String topicTitle = r.getString("tttitle");
+          SimpleTopicSummaryView topic = new SimpleTopicSummaryView(topicId, id, topicTitle);
+          ForumSummaryView forum = new ForumSummaryView(id, title, topic);
+          forums.add(forum);
+        }
+        return Result.success(forums);
+      } catch (SQLException e) {
+        return Result.fatal(e.getMessage());
+      }
     }
 
     @Override
