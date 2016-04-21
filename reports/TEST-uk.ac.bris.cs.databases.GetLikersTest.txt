@@ -1,6 +1,6 @@
 Testsuite: uk.ac.bris.cs.databases.GetLikersTest
-Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.374 sec
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.378 sec
 
-Testcase: testFail took 0.327 sec
+Testcase: testFail took 0.333 sec
 Testcase: testEmptySuccess took 0.002 sec
-Testcase: testSuccess took 0.003 sec
+Testcase: testSuccess took 0.007 sec

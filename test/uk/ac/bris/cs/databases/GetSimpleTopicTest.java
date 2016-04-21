@@ -22,8 +22,6 @@ public class GetSimpleTopicTest extends TestBase {
     }
   }
 
-
-
   @Test public void testFail() {
     mustfail(api.getSimpleTopic(34));
   }
