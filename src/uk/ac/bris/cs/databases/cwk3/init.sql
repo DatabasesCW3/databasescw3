@@ -16,6 +16,9 @@ CREATE TABLE Person (
 CREATE TABLE Post (
   id INTEGER PRIMARY KEY,
   user INTEGER REFERENCES Person(id),
+  topic INTEGER REFERENCES Topic(id),
+  postedAt INTEGER NOT NULL,
+  postNumber INTEGER NOT NULL,
   body TEXT NOT NULL
 );
 
@@ -23,7 +26,7 @@ CREATE TABLE Topic (
   id INTEGER PRIMARY KEY,
   user INTEGER REFERENCES Person(id),
   title VARCHAR(100) NOT NULL,
-  body TEXT NOT NULL
+  firstPost INTEGER REFERENCES Post(id)
 );
 
 CREATE TABLE Forum (

@@ -24,6 +24,7 @@ import uk.ac.bris.cs.databases.api.Result;
 import uk.ac.bris.cs.databases.api.PersonView;
 import uk.ac.bris.cs.databases.api.SimpleForumSummaryView;
 import uk.ac.bris.cs.databases.api.SimpleTopicView;
+import uk.ac.bris.cs.databases.api.SimplePostView;
 import uk.ac.bris.cs.databases.api.TopicView;
 
 /**
@@ -84,7 +85,8 @@ public class API implements APIProvider {
                        + " (LikesTopic INNER JOIN Person"
                        + " ON LikesTopic.User = Person.id)"
                        + " ON Topic.id = topic"
-                       + " WHERE Topic.id = ? ;";
+                       + " WHERE Topic.id = ? "
+                       + " ORDER BY name ;";
 
       try (PreparedStatement p = c.prepareStatement(SQL)) {
         p.setLong(1, topicId);
@@ -111,7 +113,40 @@ public class API implements APIProvider {
 
     @Override
     public Result<SimpleTopicView> getSimpleTopic(long topicId) {
-        throw new UnsupportedOperationException("Not supported yet.");
+      final String SQL = " SELECT Topic.id, title, Post.user, Post.body,"
+                       + " postedAt, postNumber"
+                       + " FROM Topic LEFT JOIN Post"
+                       + " ON Post.topic = Topic.id"
+                       + " WHERE Topic.id = ? ;";
+
+      try (PreparedStatement p = c.prepareStatement(SQL)) {
+        p.setLong(1, topicId);
+        ResultSet r = p.executeQuery();
+
+        if (!r.isBeforeFirst() ) {
+          return Result.failure("No such topic.");
+        }
+
+        List<SimplePostView> postList = new ArrayList<SimplePostView>();
+        String title = "";
+
+        while (r.next()) {
+          Integer postedAt = r.getInt("postedAt");
+          Integer postNumber = r.getInt("postNumber");
+          String user = r.getString("Post.user");
+          String body = r.getString("Post.body");
+          if (!r.wasNull()) {
+            SimplePostView pview = new SimplePostView(postNumber, user, body,
+                                                      postedAt);
+            postList.add(pview);
+          }
+          title = r.getString("title");
+        }
+        SimpleTopicView tview = new SimpleTopicView(topicId, title, postList);
+        return Result.success(tview);
+      } catch (SQLException e) {
+        return Result.fatal(e.getMessage());
+      }
     }
 
     @Override

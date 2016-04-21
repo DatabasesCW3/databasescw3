@@ -11,11 +11,11 @@ public class GetLikersTest extends TestBase {
 
   @Test public void testSuccess() {
     List<PersonView> users = ok(api.getLikers(1));
-    assertEquals(1, users.size());
+    assertEquals(2, users.size());
     PersonView pv = users.get(0);
-    assertEquals(pv.getName(), "dude");
-    assertEquals(pv.getUsername(), "uname");
-    assertEquals(pv.getStudentId(), "uid");
+    assertEquals(pv.getName(), "testperson 1");
+    assertEquals(pv.getUsername(), "uname 1");
+    assertEquals(pv.getStudentId(), "stuId 1");
   }
 
   @Test public void testEmptySuccess() {
