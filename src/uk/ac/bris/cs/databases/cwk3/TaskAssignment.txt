@@ -1,4 +1,9 @@
 Task 1:
-Berk: getUsers()   &   getSimpleForums()
-Simon: getPersonView()     &    countPostsInTopic()
-Neil:  getLikers()     &    getSimpleTopic()
+Berk:  getUsers()       &  getSimpleForums()
+Simon: getPersonView()  &  countPostsInTopic()
+Neil:  getLikers()      &  getSimpleTopic()
+
+Task 2:
+Berk:  getLatestPost()  &  createPost()
+Simon: getForum()       &  createForum()
+Neil:  getForums()      &  addNewPerson()
