@@ -10,7 +10,6 @@ import org.junit.Before;
 import uk.ac.bris.cs.databases.api.APIProvider;
 import uk.ac.bris.cs.databases.api.Result;
 import uk.ac.bris.cs.databases.cwk3.API;
-//import uk.ac.bris.cs.databases.cwk3.DBSetup;
 
 /**
  * Base class with common test utility methods.
@@ -42,11 +41,10 @@ public abstract class TestBase {
 
     @Before
     public void setUp() {
-        //System.err.println("Setting up test database");
         try {
             c = DriverManager.getConnection(TEST_DATABASE);
             c.setAutoCommit(false);
-            //DBSetup.setup(c);
+
             api = new API(c);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -55,9 +53,7 @@ public abstract class TestBase {
 
     @After
     public void tearDown() {
-        //System.err.println("Removing test database");
         try {
-            //DBSetup.drop(c);
             c.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -155,21 +155,8 @@ public class API implements APIProvider {
 
     @Override
     public Result addNewPerson(String name, String username, String studentId) {
-      throw new UnsupportedOperationException("Not supported yet.");
-      // if (c == null) { throw new IllegalStateException(); }
-      //
-      // final String statement = "INSERT INTO Person VALUES( null, ?, ?, ? )";
-      //
-      // try ( PreparedStatement s = c.prepareStatement(statement)) {
-      //
-      //   s.setString(1, name);
-      //   s.setString(2, username);
-      //   s.setString(3, studentId);
-      //
-      //   s.execute();
-      // } catch (SQLException e) {
-      //   return Result.fatal(e.getMessage());
-      // }
+      AddNewPerson anp = new AddNewPerson(c);
+      return anp.run(name, username, studentId);
     }
 
     @Override
