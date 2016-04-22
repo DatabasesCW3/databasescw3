@@ -23,7 +23,7 @@ INSERT INTO Forum VALUES(2, 'test forum 2');
 INSERT INTO Topic VALUES(1, 1, 'testtopic 1', 1);
 INSERT INTO Topic VALUES(2, 1, 'testtopic 2', 2);
 INSERT INTO Topic VALUES(3, 1, 'testtopic 3', 1);
-INSERT INTO Topic VALUES(4, 1, 'testtopic 4', 1);
+INSERT INTO Topic VALUES(4, 1, 'testtopic 4', 2);
 
 --                            id   usr topic
 INSERT INTO LikesTopic VALUES(null, 1, 1);

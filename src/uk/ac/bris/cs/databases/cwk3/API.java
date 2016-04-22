@@ -139,33 +139,8 @@ public class API implements APIProvider {
 
     @Override
     public Result<List<ForumSummaryView>> getForums(){
-      if (c == null) { throw new IllegalStateException(); }
-
-      final String statement = " SELECT Forum.id AS fid, Forum.title AS fTitle,"
-                             + " Topic.id AS tid,"
-                             + " Topic.title AS tTitle, postedAt"
-                             + " FROM (Forum LEFT JOIN Topic"
-                             + " ON Forum.id = Topic.forum)"
-                             + " LEFT JOIN Post ON Topic.id = Post.topic"
-                             + " WHERE Forum.id = 1"
-                             + " ORDER BY postedAt DESC LIMIT 1;";
-      List<ForumSummaryView> forums = new ArrayList<>();
-
-      try(PreparedStatement p = c.prepareStatement(statement)) {
-        ResultSet r = p.executeQuery();
-        while (r.next()) {
-          long id = r.getLong("fid");
-          String title = r.getString("fTitle");
-          long topicId = r.getLong("tid");
-          String topicTitle = r.getString("tTitle");
-          SimpleTopicSummaryView topic = new SimpleTopicSummaryView(topicId, id, topicTitle);
-          ForumSummaryView forum = new ForumSummaryView(id, title, topic);
-          forums.add(forum);
-        }
-        return Result.success(forums);
-      } catch (SQLException e) {
-        return Result.fatal(e.getMessage());
-      }
+        GetForums gf = new GetForums(c);
+        return gf.run();
     }
 
     @Override
