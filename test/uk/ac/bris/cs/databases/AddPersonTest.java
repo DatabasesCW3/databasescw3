@@ -3,6 +3,8 @@ package uk.ac.bris.cs.databases;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.Test;
+import java.sql.SQLException;
+import java.sql.PreparedStatement;
 
 import static org.junit.Assert.*;
 
@@ -25,5 +27,17 @@ public class AddPersonTest extends TestBase {
         assertEquals(7, users.size());
         assertEquals("David", users.get("csxdb"));
         assertEquals("David", users.get("csxd2"));
+
+        removeTestPeople();
+    }
+
+    private void removeTestPeople() {
+        try {
+            c.prepareStatement("DELETE FROM Person WHERE name = 'David'").executeUpdate();
+            c.commit();
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
