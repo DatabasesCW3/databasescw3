@@ -14,13 +14,12 @@ import java.util.ArrayList;
 
 class GetSimpleTopic {
     private Connection c;
-    List<SimplePostView> postList;
-    String title = "";
+    private List<SimplePostView> postList;
     private final String SQL = " SELECT Topic.id, title, Post.user, Post.body,"
-                     + " postedAt, postNumber"
-                     + " FROM Topic LEFT JOIN Post"
-                     + " ON Post.topic = Topic.id"
-                     + " WHERE Topic.id = ? ;";
+                             + " postedAt, postNumber"
+                             + " FROM Topic LEFT JOIN Post"
+                             + " ON Post.topic = Topic.id"
+                             + " WHERE Topic.id = ? ;";
 
     public GetSimpleTopic(Connection c) {
         if (c == null) { throw new IllegalStateException(); }
@@ -35,9 +34,8 @@ class GetSimpleTopic {
                 if (!r.isBeforeFirst() ) {
                     return Result.failure("No such topic.");
                 }
-                while (r.next()) {
-                    addPost(r);
-                }
+                String title = getTitle(r);
+                getPosts(r);
                 SimpleTopicView tview = new SimpleTopicView(topicId, title,
                                                             postList);
                 return Result.success(tview);
@@ -47,17 +45,23 @@ class GetSimpleTopic {
         }
     }
 
-    private void addPost(ResultSet r) throws SQLException {
+    private void getPosts(ResultSet r) throws SQLException {
+        do {
+            Integer postedAt = r.getInt("postedAt");
+            Integer postNumber = r.getInt("postNumber");
+            String user = r.getString("user");
+            String body = r.getString("body");
+            SimplePostView pview = new SimplePostView(postNumber, user, body,
+                                                      postedAt);
+            postList.add(pview);
+        } while (r.next());
+    }
 
-        if (title.equals("")) {
-            title = r.getString("title");
-        }
-        Integer postedAt = r.getInt("postedAt");
-        Integer postNumber = r.getInt("postNumber");
-        String user = r.getString("user");
-        String body = r.getString("body");
-        SimplePostView pview = new SimplePostView(postNumber, user, body,
-                                                  postedAt);
-        postList.add(pview);
+    private String getTitle(ResultSet r)
+    throws SQLException {
+        r.next();
+        String title = r.getString("title");
+
+        return title;
     }
 }
