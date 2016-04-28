@@ -150,7 +150,33 @@ public class API implements APIProvider {
 
     @Override
     public Result createForum(String title) {
-        throw new UnsupportedOperationException("Not supported yet.");
+		//TODO: Set title to unique in database rather than check here?
+        final String checkStatement = "SELECT * FROM Forum WHERE title = ?";
+		
+		if (title == null || title.equals("")) {
+			return Result.failure("Forum name must not be null or empty!");
+		}
+		
+        try(PreparedStatement p = c.prepareStatement(checkStatement)) {
+            p.setString(1, title);
+
+            ResultSet results = p.executeQuery();
+            if (results.next()) {
+                return Result.failure("Forum with same name already exists!");
+            }
+        } catch (SQLException e) {
+            return Result.fatal(e.getMessage());
+        }
+		
+        final String insertStatement = "INSERT INTO Forum(title) VALUES (?)";
+		
+		try(PreparedStatement p = c.prepareStatement(insertStatement)) {
+            p.setString(1, title);
+            p.executeUpdate();
+			return Result.success();
+        } catch (SQLException e) {
+            return Result.fatal(e.getMessage());
+        }
     }
 
     @Override
@@ -166,7 +192,33 @@ public class API implements APIProvider {
 
     @Override
     public Result<ForumView> getForum(long id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        final String statement = "SELECT Forum.title AS fTitle, Topic.id AS tId, Topic.title AS tTitle FROM Forum LEFT JOIN Topic ON Forum.id = Topic.forum WHERE Forum.id = ?";
+		String forumTitle = null;
+		List<SimpleTopicSummaryView> topics = new ArrayList<SimpleTopicSummaryView>();
+		
+        try(PreparedStatement p = c.prepareStatement(statement)) {
+            p.setLong(1, id);
+			
+			try (ResultSet r = p.executeQuery()) {
+                while (r.next()) {
+					long topicId = r.getLong("tId");
+					forumTitle = r.getString("fTitle");
+					String topicTitle = r.getString("tTitle");
+
+					SimpleTopicSummaryView topic = new SimpleTopicSummaryView(topicId, id, topicTitle);
+					topics.add(topic);
+                }
+            }
+			
+			if (forumTitle == null) {
+				return Result.failure("Forum does not exist!");
+			} else {
+				ForumView forum = new ForumView(id, forumTitle, topics);
+				return Result.success(forum);
+			}
+        } catch (SQLException e) {
+            return Result.fatal(e.getMessage());
+        }
     }
 
     @Override
