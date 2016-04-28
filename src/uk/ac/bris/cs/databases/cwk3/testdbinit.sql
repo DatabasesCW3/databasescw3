@@ -28,6 +28,7 @@ INSERT INTO Post VALUES(null, 4, 1, 18,   14, 'test post 14');
 
 INSERT INTO Forum VALUES(1, 'test forum 1');
 INSERT INTO Forum VALUES(2, 'test forum 2');
+INSERT INTO Forum VALUES(3, 'test forum 3');
 
 --                       id author            forum
 INSERT INTO Topic VALUES(1, 1, 'testtopic 1', 1);
