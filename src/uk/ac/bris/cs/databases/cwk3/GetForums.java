@@ -47,14 +47,17 @@ class GetForums {
     }
 
     private void addForum(ResultSet r) throws SQLException {
-        long forumId = r.getLong("fid");
-        long topicId = r.getLong("tid");
+        Long forumId = r.getLong("fid");
+        Long topicId = r.getLong("tid");
         String forumTitle = r.getString("fTitle");
         String topicTitle = r.getString("tTitle");
 
-        SimpleTopicSummaryView latestTopic =
-        new SimpleTopicSummaryView(topicId, forumId, topicTitle);
+        SimpleTopicSummaryView latestTopic;
 
+        if (r.wasNull()) { latestTopic = null; }
+        else { latestTopic = new SimpleTopicSummaryView(topicId, forumId,
+                                                        topicTitle);
+        }
         ForumSummaryView forum = new ForumSummaryView(forumId, forumTitle,
                                                       latestTopic);
         forums.add(forum);
