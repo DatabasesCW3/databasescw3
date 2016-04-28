@@ -4,6 +4,10 @@ Simon: getPersonView()  &  countPostsInTopic()
 Neil:  getLikers()      &  getSimpleTopic()
 
 Task 2:
-Berk:  getLatestPost()  &  createPost()
-Simon: getForum()       &  createForum()
-Neil:  getForums()      &  addNewPerson()
+Berk:  getLatestPost()  &  createPost()    & favouriteTopic()
+Simon: getForum()       &  createForum()   & likeTopic()
+Neil:  getForums()      &  addNewPerson()  & getTopic()
+
+Task 3:
+Simon: createTopic()
+Others communal
