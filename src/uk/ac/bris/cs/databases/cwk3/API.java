@@ -150,7 +150,6 @@ public class API implements APIProvider {
 
     @Override
     public Result createForum(String title) {
-		//TODO: Set title to unique in database rather than check here?
         final String checkStatement = "SELECT * FROM Forum WHERE title = ?";
 		
 		if (title == null || title.equals("")) {
