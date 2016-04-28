@@ -10,19 +10,19 @@ import static org.junit.Assert.*;
 
 public class GetSimpleTopicTest extends TestBase {
 
-  @Test public void testSuccess() {
-    SimpleTopicView topic = ok(api.getSimpleTopic(1));
-    List<SimplePostView> posts = topic.getPosts();
-    int i = 0;
-    assertEquals(4, posts.size());
+    @Test public void testSuccess() {
+        SimpleTopicView topic = ok(api.getSimpleTopic(1));
+        List<SimplePostView> posts = topic.getPosts();
+        int i = 0;
+        assertEquals(14, posts.size());
 
-    for (SimplePostView post: posts) {
-      i++;
-      assertEquals(post.getText(), "test post " + i);
+        for (SimplePostView post: posts) {
+            i++;
+            assertEquals(post.getText(), "test post " + i);
+        }
     }
-  }
 
-  @Test public void testFail() {
-    mustfail(api.getSimpleTopic(34));
-  }
+    @Test public void testFail() {
+        mustfail(api.getSimpleTopic(34));
+    }
 }

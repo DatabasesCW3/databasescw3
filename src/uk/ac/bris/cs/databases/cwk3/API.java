@@ -171,8 +171,8 @@ public class API implements APIProvider {
 
     @Override
     public Result<TopicView> getTopic(long topicId, int page) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+        GetTopic gt = new GetTopic(c);
+        return gt.run(topicId, page);    }
 
     @Override
     public Result likeTopic(String username, long topicId, boolean like) {
