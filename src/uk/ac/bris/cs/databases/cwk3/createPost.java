@@ -35,7 +35,7 @@ public class CreatePost {
                     p.setString(1, username);
                     p.setLong(2, topicID);
                     p.setInt(3, (int) new Date().getTime());
-                    p.setInt(4, postNumber);
+                    p.setInt(4, postNumber + 1);
                     p.setString(5, text);
                     p.execute();
                     c.commit();

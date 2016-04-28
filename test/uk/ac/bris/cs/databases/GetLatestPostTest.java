@@ -13,6 +13,5 @@ public class GetLatestPostTest extends TestBase {
 
     @Test
     public void testGetLatestPost() {
-        ok(Result.failure("bad"));
     }
 }
