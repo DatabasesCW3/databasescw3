@@ -173,6 +173,7 @@ public class API implements APIProvider {
 		try(PreparedStatement p = c.prepareStatement(insertStatement)) {
             p.setString(1, title);
             p.executeUpdate();
+            c.commit();
 			return Result.success();
         } catch (SQLException e) {
             return Result.fatal(e.getMessage());
@@ -200,22 +201,24 @@ public class API implements APIProvider {
             p.setLong(1, id);
 			
 			try (ResultSet r = p.executeQuery()) {
+				if (!r.isBeforeFirst()) {
+					return Result.failure("Forum does not exist!");
+				}
+				
                 while (r.next()) {
-					long topicId = r.getLong("tId");
+					Long topicId = r.getLong("tId");
 					forumTitle = r.getString("fTitle");
 					String topicTitle = r.getString("tTitle");
-
-					SimpleTopicSummaryView topic = new SimpleTopicSummaryView(topicId, id, topicTitle);
-					topics.add(topic);
+					
+					if (!r.wasNull()) {
+						SimpleTopicSummaryView topic = new SimpleTopicSummaryView(topicId, id, topicTitle);
+						topics.add(topic);
+					}
                 }
             }
 			
-			if (forumTitle == null) {
-				return Result.failure("Forum does not exist!");
-			} else {
-				ForumView forum = new ForumView(id, forumTitle, topics);
-				return Result.success(forum);
-			}
+			ForumView forum = new ForumView(id, forumTitle, topics);
+			return Result.success(forum);
         } catch (SQLException e) {
             return Result.fatal(e.getMessage());
         }
