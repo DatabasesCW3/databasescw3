@@ -32,7 +32,7 @@ public class CreatePost {
                     if (postNumber == 0) {
                         return Result.failure("That topic does not exist!");
                     }
-                    p.setString(1, username);
+                    p.setLong(1, userID);
                     p.setLong(2, topicID);
                     p.setInt(3, (int) new Date().getTime());
                     p.setInt(4, postNumber + 1);
