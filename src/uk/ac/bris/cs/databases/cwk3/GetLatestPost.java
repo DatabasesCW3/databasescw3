@@ -22,7 +22,7 @@ public class GetLatestPost {
                                     + " JOIN Person ON Post.user = Person.id"
                                     + " LEFT JOIN LikesPost ON Post.id = LikesPost.post"
                                     + " WHERE topic = ?"
-                                    + " ORDER BY post.postedAt";
+                                    + " ORDER BY post.postedAt DESC";
     GetLatestPost(Connection c) {
         this.c = c;
     }
@@ -43,7 +43,9 @@ public class GetLatestPost {
                 return Result.failure("There are no posts in this topic!");
             }
 
-            return Result.success(getPost(results));
+            PostView pw = getPost(results);
+
+            return Result.success(pw);
 
         } catch (SQLException e) {
             return Result.fatal(e.getMessage());
