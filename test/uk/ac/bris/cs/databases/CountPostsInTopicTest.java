@@ -15,11 +15,11 @@ public class CountPostsInTopicTest extends TestBase {
     
     @Test public void testCountPostsInTopic() {
 		int topic1 = ok(api.countPostsInTopic(1));
-		assertEquals(4, topic1);
+		assertEquals(14, topic1);
 		
 		int topic2 = ok(api.countPostsInTopic(2));
 		assertEquals(1, topic2);
 		
-		mustfail(api.countPostsInTopic(3));
+		mustfail(api.countPostsInTopic(445));
     }
 }

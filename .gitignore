@@ -4,3 +4,4 @@ bb.iml
 reports/*
 testclasses/*
 target/*
+database/sqlite3.exe
