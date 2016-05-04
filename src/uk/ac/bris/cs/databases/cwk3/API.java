@@ -139,7 +139,8 @@ public class API implements APIProvider {
 
     @Override
     public Result<PostView> getLatestPost(long topicId) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        GetLatestPost glp = new GetLatestPost(c);
+        return glp.run(topicId);
     }
 
     @Override
@@ -150,7 +151,6 @@ public class API implements APIProvider {
 
     @Override
     public Result createForum(String title) {
-		//TODO: Set title to unique in database rather than check here?
         final String checkStatement = "SELECT * FROM Forum WHERE title = ?";
 
 		if (title == null || title.equals("")) {
@@ -182,7 +182,9 @@ public class API implements APIProvider {
 
     @Override
     public Result createPost(long topicId, String username, String text) {
-        throw new UnsupportedOperationException("Not supported yet.");
+//        throw new UnsupportedOperationException("Not supported yet.");
+        CreatePost cp = new CreatePost(c);
+        return cp.run(topicId, username, text);
     }
 
     @Override
