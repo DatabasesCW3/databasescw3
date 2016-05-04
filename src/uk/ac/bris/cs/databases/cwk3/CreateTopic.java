@@ -101,6 +101,8 @@ class CreateTopic {
         if (username == null) { return false; }
         if (title == null) { return false; }
         if (text == null) { return false; }
+        if ("".equals(title)) { return false; }
+        if ("".equals(text)) { return false; }
         return true;
     }
 }
