@@ -62,13 +62,14 @@ public class CreatePost {
 
     private Long getUserIDForUsername(String username) throws SQLException {
         try (PreparedStatement p = c.prepareStatement(userCheck)) {
+
             p.setString(1, username);
-            try (ResultSet r = p.executeQuery()) {
-                if (r.isBeforeFirst()) {
-                    return r.getLong("id");
-                } else
-                    return null;
-            }
+            ResultSet r = p.executeQuery();
+
+            if (r.isBeforeFirst())
+                return r.getLong("id");
+            else
+                return null;
         }
     }
 
