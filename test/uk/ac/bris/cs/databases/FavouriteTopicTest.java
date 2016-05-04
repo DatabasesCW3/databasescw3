@@ -10,6 +10,7 @@ public class FavouriteTopicTest extends TestBase {
 
     @Test
     public void testFavouriteTopic() {
+        ok(api.favouriteTopic("uname 4", 1, false));
     }
 
     @Test
