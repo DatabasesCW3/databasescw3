@@ -11,24 +11,24 @@ import uk.ac.bris.cs.databases.api.ForumSummaryView;
 
 import java.util.Date;
 
-class LikeTopic {
+class LikePost {
     private Connection c;
     private Integer userId;
     private Boolean exists;
 
-    public LikeTopic(Connection c) {
+    public LikePost(Connection c) {
         if (c == null) { throw new IllegalStateException(); }
         this.c = c;
     }
 
-    public Result run(String username, long topicId, boolean like) {
+    public Result run(String username, long topicId, int post, boolean like) {
         if (!validate(username)) {
             return Result.failure("Invalid input");
         }
         try {
-            initialise(username, topicId);
+            initialise(username, topicId, post);
             if (exists) {
-                addLike(topicId, like);
+                addLike(post, like);
                 c.commit();
                 return Result.success();
             } else {
@@ -40,30 +40,30 @@ class LikeTopic {
         }
     }
     
-    private void addLike(long topicId, boolean like) throws SQLException {
-        if (likeExists(topicId)) {
+    private void addLike(int post, boolean like) throws SQLException {
+        if (likeExists(post)) {
             if (!like) {
-                try ( PreparedStatement p = c.prepareStatement("DELETE FROM LikesTopic WHERE user = ? AND topic = ?")) {
+                try ( PreparedStatement p = c.prepareStatement("DELETE FROM LikesPost WHERE user = ? AND post = ?")) {
                     p.setInt(1, userId);
-                    p.setLong(2, topicId);
+                    p.setInt(2, post);
                     p.execute();
                 }
             }
         } else {
             if (like) {
-                try ( PreparedStatement p = c.prepareStatement("INSERT INTO LikesTopic(user, topic) VALUES(?, ?)")) {
+                try ( PreparedStatement p = c.prepareStatement("INSERT INTO LikesPost(user, post) VALUES(?, ?)")) {
                     p.setInt(1, userId);
-                    p.setLong(2, topicId);
+                    p.setInt(2, post);
                     p.execute();
                 }
             }
         }
     }
     
-    public Boolean likeExists(long topicId) {
-        try(PreparedStatement p = c.prepareStatement("SELECT * FROM LikesTopic WHERE user = ? AND topic = ?")) {
+    public Boolean likeExists(int post) {
+        try(PreparedStatement p = c.prepareStatement("SELECT * FROM LikesPost WHERE user = ? AND post = ?")) {
             p.setInt(1, userId);
-            p.setLong(2, topicId);
+            p.setInt(2, post);
             
             ResultSet r = p.executeQuery();
             if (r.isBeforeFirst()) {
@@ -80,22 +80,25 @@ class LikeTopic {
         return true;
     }
 
-    private void initialise(String username, long topicId) throws SQLException {
+    private void initialise(String username, long topicId, int post) throws SQLException {
         String check = "SELECT "
                      + "EXISTS (SELECT 1 FROM Person WHERE Person.username = ?) AS unameExists, "
                      + "EXISTS (SELECT 1 FROM Topic WHERE Topic.id = ?) AS forumExists, "
+                     + "EXISTS (SELECT 1 FROM Post WHERE Post.id = ?) AS postExists, "
                      + "(SELECT Person.id FROM Person WHERE Person.username = ? ) AS userId "
                      + "FROM Person;";
         
         try (PreparedStatement p = c.prepareStatement(check)) {
             p.setString(1, username);
             p.setLong(2, topicId);
-            p.setString(3, username);
+            p.setInt(3, post);
+            p.setString(4, username);
             try (ResultSet r = p.executeQuery()) {
                 if (!r.isBeforeFirst() ) { exists = false; }
                 Boolean u = r.getBoolean("unameExists");
                 Boolean f = r.getBoolean("forumExists");
-                exists = u & f;
+                Boolean po = r.getBoolean("postExists");
+                exists = u & f & po;
                 userId = r.getInt("userId");
             }
         }
