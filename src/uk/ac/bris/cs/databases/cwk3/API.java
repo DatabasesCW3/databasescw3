@@ -256,7 +256,8 @@ public class API implements APIProvider {
 
     @Override
     public Result<AdvancedPersonView> getAdvancedPersonView(String username) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        GetAdvancedPersonView gapv = new GetAdvancedPersonView(c);
+        return gapv.run(username);
     }
 
     @Override
