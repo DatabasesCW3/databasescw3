@@ -31,13 +31,17 @@ INSERT INTO Forum VALUES(2, 'test forum 2');
 
 --                       id author            forum
 INSERT INTO Topic VALUES(1, 1, 'testtopic 1', 1);
-INSERT INTO Topic VALUES(2, 1, 'testtopic 2', 2);
-INSERT INTO Topic VALUES(3, 1, 'testtopic 3', 1);
-INSERT INTO Topic VALUES(4, 1, 'testtopic 4', 2);
+INSERT INTO Topic VALUES(2, 3, 'testtopic 2', 2);
+INSERT INTO Topic VALUES(3, 4, 'testtopic 3', 1);
+INSERT INTO Topic VALUES(4, 4, 'testtopic 4', 2);
 
 --                            id   usr topic
 INSERT INTO LikesTopic VALUES(null, 1, 1);
 INSERT INTO LikesTopic VALUES(null, 2, 1);
+INSERT INTO LikesTopic VALUES(null, 1, 3);
+INSERT INTO LikesTopic VALUES(null, 2, 3);
+INSERT INTO LikesTopic VALUES(null, 3, 3);
+INSERT INTO LikesTopic VALUES(null, 4, 4);
 
 --                            id   usr post
 INSERT INTO LikesPost VALUES(null, 1, 1);
@@ -48,3 +52,9 @@ INSERT INTO LikesPost VALUES(null, 3, 1);
 
 --
 INSERT INTO Favourite VALUES (null, 1, 1);
+INSERT INTO Favourite VALUES (null, 4, 1);
+INSERT INTO Favourite VALUES (null, 4, 2);
+INSERT INTO Favourite VALUES (null, 4, 3);
+INSERT INTO Favourite VALUES (null, 4, 4);
+INSERT INTO Favourite VALUES (null, 4, 5);
+INSERT INTO Favourite VALUES (null, 4, 6);
