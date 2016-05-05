@@ -25,12 +25,12 @@ public class FavouriteTopic {
             if (userID == null)
                 return Result.failure("User or topic does not exist!");
 
-            boolean alreadyFavourited = alreadyFavourited();
+            boolean alreadyFavourited = alreadyFavourited(topicId);
 
             if (alreadyFavourited && !fav) {
-                return updateFavourite(makeFavourite, topicId);
-            } else if (!alreadyFavourited && fav){
                 return updateFavourite(removeFavourite, topicId);
+            } else if (!alreadyFavourited && fav){
+                return updateFavourite(makeFavourite, topicId);
             } else {
                 return Result.success();
             }
@@ -41,7 +41,7 @@ public class FavouriteTopic {
     }
 
     private Result updateFavourite(String operation, long topicID) throws SQLException {
-        try(PreparedStatement p = c.prepareStatement(removeFavourite)) {
+        try(PreparedStatement p = c.prepareStatement(operation)) {
             p.setLong(1, userID);
             p.setLong(2, topicID);
             p.execute();
@@ -50,8 +50,10 @@ public class FavouriteTopic {
         }
     }
 
-    private boolean alreadyFavourited() throws SQLException {
+    private boolean alreadyFavourited(long topicID) throws SQLException {
         try (PreparedStatement p = c.prepareStatement(statement)){
+            p.setLong(1, userID);
+            p.setLong(2, topicID);
             try (ResultSet results = p.executeQuery()) {
                 return (results.isBeforeFirst());
             }
@@ -62,14 +64,14 @@ public class FavouriteTopic {
         try (PreparedStatement p = c.prepareStatement(userAndTopicCheck)) {
             p.setString(1, username);
             p.setLong(2, topicID);
-            ResultSet r = p.executeQuery();
+            try (ResultSet r = p.executeQuery()) {
 
-            if (r.isBeforeFirst()) {
-                r.next();
-                return r.getLong("personid");
+                if (r.isBeforeFirst()) {
+                    r.next();
+                    return r.getLong("personid");
+                } else
+                    return null;
             }
-            else
-                return null;
         }
     }
 
