@@ -15,7 +15,7 @@ import uk.ac.bris.cs.databases.api.PostView;
 import static org.junit.Assert.*;
 
 public class LikePostTest extends TestBase {
-	
+    
     @Test public void testLikePost() {
         ok(api.likePost("uname 1", 1, 1, true));
         ok(api.likePost("uname 1", 1, 10, true));

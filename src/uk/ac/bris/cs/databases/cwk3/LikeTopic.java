@@ -22,7 +22,7 @@ class LikeTopic {
     }
 
     public Result run(String username, long topicId, boolean like) {
-		if (!validate(username)) {
+        if (!validate(username)) {
             return Result.failure("Invalid input");
         }
         try {
@@ -39,39 +39,39 @@ class LikeTopic {
             return Result.fatal(e.getMessage());
         }
     }
-	
+    
     private void addLike(long topicId, boolean like) throws SQLException {
-		if (likeExists(topicId)) {
-			if (!like) {
-				try ( PreparedStatement p = c.prepareStatement("DELETE FROM LikesTopic WHERE user = ? AND topic = ?")) {
-					p.setInt(1, userId);
-					p.setLong(2, topicId);
-					p.execute();
-				}
-			}
-		} else {
-			if (like) {
-				try ( PreparedStatement p = c.prepareStatement("INSERT INTO LikesTopic(user, topic) VALUES(?, ?)")) {
-					p.setInt(1, userId);
-					p.setLong(2, topicId);
-					p.execute();
-				}
-			}
-		}
+        if (likeExists(topicId)) {
+            if (!like) {
+                try ( PreparedStatement p = c.prepareStatement("DELETE FROM LikesTopic WHERE user = ? AND topic = ?")) {
+                    p.setInt(1, userId);
+                    p.setLong(2, topicId);
+                    p.execute();
+                }
+            }
+        } else {
+            if (like) {
+                try ( PreparedStatement p = c.prepareStatement("INSERT INTO LikesTopic(user, topic) VALUES(?, ?)")) {
+                    p.setInt(1, userId);
+                    p.setLong(2, topicId);
+                    p.execute();
+                }
+            }
+        }
     }
-	
+    
     public Boolean likeExists(long topicId) {
         try(PreparedStatement p = c.prepareStatement("SELECT * FROM LikesTopic WHERE user = ? AND topic = ?")) {
-			p.setInt(1, userId);
+            p.setInt(1, userId);
             p.setLong(2, topicId);
-			
+            
             ResultSet r = p.executeQuery();
             if (r.isBeforeFirst()) {
                 return true;
             }
         } catch (SQLException e) {
         }
-		return false;
+        return false;
     }
 
     private boolean validate(String username) {
@@ -81,12 +81,12 @@ class LikeTopic {
     }
 
     private void initialise(String username, long topicId) throws SQLException {
-		String check = "SELECT "
-				     + "EXISTS (SELECT 1 FROM Person WHERE Person.username = ?) AS unameExists, "
-				     + "EXISTS (SELECT 1 FROM Topic WHERE Topic.id = ?) AS forumExists, "
-				     + "(SELECT Person.id FROM Person WHERE Person.username = ? ) AS userId "
-				     + "FROM Person;";
-		
+        String check = "SELECT "
+                     + "EXISTS (SELECT 1 FROM Person WHERE Person.username = ?) AS unameExists, "
+                     + "EXISTS (SELECT 1 FROM Topic WHERE Topic.id = ?) AS forumExists, "
+                     + "(SELECT Person.id FROM Person WHERE Person.username = ? ) AS userId "
+                     + "FROM Person;";
+        
         try (PreparedStatement p = c.prepareStatement(check)) {
             p.setString(1, username);
             p.setLong(2, topicId);
@@ -96,7 +96,7 @@ class LikeTopic {
                 Boolean u = r.getBoolean("unameExists");
                 Boolean f = r.getBoolean("forumExists");
                 exists = u & f;
-				userId = r.getInt("userId");
+                userId = r.getInt("userId");
             }
         }
     }
