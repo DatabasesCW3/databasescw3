@@ -239,7 +239,8 @@ public class API implements APIProvider {
 
     @Override
     public Result favouriteTopic(String username, long topicId, boolean fav) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        FavouriteTopic ft = new FavouriteTopic(c);
+        return ft.run(username, topicId, fav);
     }
 
     @Override
@@ -250,8 +251,8 @@ public class API implements APIProvider {
 
     @Override
     public Result<List<AdvancedForumSummaryView>> getAdvancedForums() {
-        GetAdvancedForums gaf = new GetAdvancedForums(c);
-        return gaf.run();
+        GetAdvancedForums gafs = new GetAdvancedForums(c);
+        return gafs.run();
     }
 
     @Override
@@ -261,7 +262,8 @@ public class API implements APIProvider {
 
     @Override
     public Result<AdvancedForumView> getAdvancedForum(long id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        GetAdvancedForum gaf = new GetAdvancedForum(c);
+        return gaf.run(id);
     }
 
     @Override

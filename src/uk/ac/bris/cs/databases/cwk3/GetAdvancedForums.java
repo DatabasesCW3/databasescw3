@@ -50,7 +50,8 @@ class GetAdvancedForums {
     + "     ON FirstPost.user = FirstPerson.id)"
     + "     LEFT JOIN LikesTopic ON LikesTopic.topic = Topic.id)"
     + " ON Topic.forum = Forum.id"
-    + " GROUP BY fid;";
+    + " GROUP BY fid"
+    + " ORDER BY fTitle ASC;";
     
     private List<AdvancedForumSummaryView> forums;
     private Connection c;
