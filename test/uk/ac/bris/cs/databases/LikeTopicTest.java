@@ -18,32 +18,11 @@ public class LikeTopicTest extends TestBase {
 	
     @Test public void testLikeTopic() {
         ok(api.likeTopic("uname 1", 1, true));
+        ok(api.likeTopic("uname 5", 1, true));
+        ok(api.likeTopic("uname 5", 1, false));
         
-        /*TopicView tv = ok(api.getTopic(5,0));
-        PostView pv = tv.getPosts().get(0);
-        assertEquals(pv.getText(), "REMOVE123BODY");*/
-        
-        /* failure if forum does not exist, user does not exist, title or text 
-         * empty */
-        /*mustfail(api.createTopic(1, "uname 1", "REMOVE123", ""));
-        mustfail(api.createTopic(1, "uname 1", "", "REMOVE123BODY"));
-        mustfail(api.createTopic(1234, "uname 1", "REMOVE123", "REMOVE123BODY"));
-        mustfail(api.createTopic(1, "nonexistent", "REMOVE123", "REMOVE123BODY"));*/
+        //Failure if person or topic doesn't exist
+        mustfail(api.likeTopic("uname 2035", 1, true));
+        mustfail(api.likeTopic("uname 1", 1526, true));
     }
-    
-    /*@After
-    public void removeTestTopics() {
-        try {
-            c.prepareStatement("DELETE FROM Topic "
-                             + "WHERE Topic.title = 'REMOVE123' ")
-                             .executeUpdate();
-            c.prepareStatement("DELETE FROM Post "
-                             + "WHERE Post.body = 'REMOVE123BODY' ")
-                             .executeUpdate();
-            c.commit();
-        }
-        catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }*/
 }
