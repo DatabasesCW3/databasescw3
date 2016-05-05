@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 class GetAdvancedForum {
-  
+
     private final String statement = "SELECT"
     + " Forum.id              AS fid,"
     + " Forum.title           AS fTitle,"
@@ -52,9 +52,9 @@ class GetAdvancedForum {
     + "     ON FirstPost.user = FirstPerson.id)"
     + " ON Topic.forum = Forum.id"
     + " GROUP BY Topic.id"
-    + " HAVING forum.id = ? 
+    + " HAVING forum.id = ? "
     + " ORDER BY lastPostTime DESC;";
-    
+
     private AdvancedForumView forum;
     private List<TopicSummaryView> topics;
     private Connection c;
@@ -94,23 +94,23 @@ class GetAdvancedForum {
         String lastPoster      = r.getString("lastPoster");
         String firstPoster     = r.getString("firstPoster");
         String firstPosterName = r.getString("firstPosterName");
-        
+
         TopicSummaryView topic;
 
         if (r.wasNull()) { topic = null; }
-        else { 
-            topic = new TopicSummaryView(topicId, 
-                                         forumId, 
-                                         topicTitle, 
-                                         postCount, 
-                                         firstPostTime, 
-                                         lastPostTime, 
+        else {
+            topic = new TopicSummaryView(topicId,
+                                         forumId,
+                                         topicTitle,
+                                         postCount,
+                                         firstPostTime,
+                                         lastPostTime,
                                          lastPoster,
                                          likes,
-                                         firstPoster, 
+                                         firstPoster,
                                          firstPosterName);
             topics.add(topic);
         }
-        
+
     }
 }
