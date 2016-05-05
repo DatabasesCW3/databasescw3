@@ -249,7 +249,8 @@ public class API implements APIProvider {
 
     @Override
     public Result<List<AdvancedForumSummaryView>> getAdvancedForums() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        GetAdvancedForums gaf = new GetAdvancedForums(c);
+        return gaf.run();
     }
 
     @Override
