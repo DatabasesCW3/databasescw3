@@ -66,8 +66,10 @@ public class CreatePost {
             p.setString(1, username);
             ResultSet r = p.executeQuery();
 
-            if (r.isBeforeFirst())
+            if (r.isBeforeFirst()) {
+                r.next();
                 return r.getLong("id");
+            }
             else
                 return null;
         }
