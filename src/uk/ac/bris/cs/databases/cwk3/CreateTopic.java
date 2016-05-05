@@ -16,17 +16,19 @@ class CreateTopic {
     private Long topicId;
     private Long userId;
     private Boolean exists;
-    private final String check = " SELECT EXISTS "
-                               + " (SELECT 1 FROM Person "
+    private final String check = " SELECT"
+                               + " EXISTS (SELECT 1 FROM Person "
                                + " WHERE Person.username = ? )"
                                + " AS unameExists,"
                                + " EXISTS (SELECT 1 FROM Forum "
                                + " WHERE Forum.id = ? )"
                                + " AS forumExists,"
-                               + " Person.id AS userId,"
-                               + " MAX(Topic.id) + 1 AS topicId"
-                               + " FROM Person, Topic"
-                               + " WHERE Person.username = ? ;";
+                               + " (SELECT Person.id FROM Person "
+                               + " WHERE Person.username = ? )"
+                               + " AS userId, "
+                               + " CASE WHEN MAX(Topic.id) IS NULL THEN 1"
+                               + " else MAX(Topic.id) + 1 END AS topicId"
+                               + " FROM Topic;";
 
     private final String newTopic = "INSERT INTO Topic VALUES"
                                   + " ( ?, ?, ?, ? )";
@@ -91,8 +93,9 @@ class CreateTopic {
                 Boolean u = r.getBoolean("unameExists");
                 Boolean f = r.getBoolean("forumExists");
                 exists = u & f;
-                topicId = r.getLong("topicId");
                 userId = r.getLong("userId");
+                topicId = r.getLong("topicId");
+                if (r.wasNull() || topicId == null) { topicId = 1l; } 
             }
         }
     }
