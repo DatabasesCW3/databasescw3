@@ -1,9 +1,6 @@
 package uk.ac.bris.cs.databases;
 
-import org.junit.After;
 import org.junit.Test;
-
-import java.sql.SQLException;
 
 /**
  * Created by berk on 04/05/16.
@@ -25,15 +22,5 @@ public class FavouriteTopicTest extends TestBase {
     public void testInvalidTopic() {
 
         mustfail(api.favouriteTopic("uname 4", 1000, true));
-    }
-
-    private void addFavouriteBackInAfterTest() {
-        try {
-            c.prepareStatement("INSERT INTO Favourite VALUES (null, 1, 1)").executeUpdate();
-            c.commit();
-        }
-        catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
     }
 }
