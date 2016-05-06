@@ -9,7 +9,7 @@ import uk.ac.bris.cs.databases.api.Result;
 import uk.ac.bris.cs.databases.api.SimpleTopicSummaryView;
 import uk.ac.bris.cs.databases.api.ForumSummaryView;
 
-import java.util.Date;
+import java.time.Instant;
 
 class CreateTopic {
     private Connection c;
@@ -77,7 +77,7 @@ class CreateTopic {
         try ( PreparedStatement p = c.prepareStatement(newPost)) {
             p.setLong(1, userId);
             p.setLong(2, topicId);
-            p.setLong(3, new Date().getTime());
+            p.setLong(3, Instant.now().getEpochSecond());
             p.setString(4, text);
             p.execute();
         }
@@ -95,7 +95,7 @@ class CreateTopic {
                 exists = u & f;
                 userId = r.getLong("userId");
                 topicId = r.getLong("topicId");
-                if (r.wasNull() || topicId == null) { topicId = 1l; } 
+                if (r.wasNull() || topicId == null) { topicId = 1l; }
             }
         }
     }
