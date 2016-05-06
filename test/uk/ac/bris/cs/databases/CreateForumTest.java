@@ -16,19 +16,19 @@ import static org.junit.Assert.*;
 public class CreateForumTest extends TestBase {
 	
     @Test public void testCreateForum() {
-		mustfail(api.getForum(3));
-		api.createForum("test forum 3");
+		mustfail(api.getForum(4));
+		api.createForum("test forum 4");
 		
-		ForumView fv = ok(api.getForum(3));
-		assertEquals("test forum 3", fv.getTitle());
-		assertEquals(3, fv.getId());
+		ForumView fv = ok(api.getForum(4));
+		assertEquals("test forum 4", fv.getTitle());
+		assertEquals(4, fv.getId());
 		
 		removeTestForum();
     }
 
     private void removeTestForum() {
         try {
-            c.prepareStatement("DELETE FROM Forum WHERE title = 'test forum 3'").executeUpdate();
+            c.prepareStatement("DELETE FROM Forum WHERE title = 'test forum 4'").executeUpdate();
             c.commit();
         } catch (SQLException e) {
             System.out.println(e.getMessage());

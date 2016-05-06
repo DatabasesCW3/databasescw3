@@ -18,6 +18,6 @@ public class GetForumTest extends TestBase {
 		assertEquals("test forum 1", fv.getTitle());
 		assertEquals(1, fv.getId());
 		
-		mustfail(api.getForum(3));
+		mustfail(api.getForum(4));
     }
 }

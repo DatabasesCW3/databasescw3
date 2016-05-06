@@ -1,7 +1,7 @@
 package uk.ac.bris.cs.databases.cwk3;
 
 import java.sql.*;
-import java.util.Date;
+import java.time.Instant;
 import uk.ac.bris.cs.databases.api.Result;
 
 public class CreatePost {
@@ -34,7 +34,7 @@ public class CreatePost {
                     }
                     p.setLong(1, userID);
                     p.setLong(2, topicID);
-                    p.setInt(3, (int) new Date().getTime());
+                    p.setLong(3, Instant.now().getEpochSecond());
                     p.setInt(4, postNumber + 1);
                     p.setString(5, text);
                     p.execute();
@@ -62,13 +62,16 @@ public class CreatePost {
 
     private Long getUserIDForUsername(String username) throws SQLException {
         try (PreparedStatement p = c.prepareStatement(userCheck)) {
+
             p.setString(1, username);
-            try (ResultSet r = p.executeQuery()) {
-                if (r.isBeforeFirst()) {
-                    return r.getLong("id");
-                } else
-                    return null;
+            ResultSet r = p.executeQuery();
+
+            if (r.isBeforeFirst()) {
+                r.next();
+                return r.getLong("id");
             }
+            else
+                return null;
         }
     }
 

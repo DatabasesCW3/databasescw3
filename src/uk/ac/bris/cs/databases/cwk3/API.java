@@ -113,9 +113,9 @@ public class API implements APIProvider {
                 int numRows = results.getInt("cnt");
 
                 results.close();
-				if (numRows > 0) {
-					return Result.success(numRows);
-				}
+                if (numRows > 0) {
+                    return Result.success(numRows);
+                }
             }
             return Result.failure("There is no topic with that ID");
         } catch (SQLException e) {
@@ -152,11 +152,11 @@ public class API implements APIProvider {
     @Override
     public Result createForum(String title) {
         final String checkStatement = "SELECT * FROM Forum WHERE title = ?";
-		
-		if (title == null || title.equals("")) {
-			return Result.failure("Forum name must not be null or empty!");
-		}
-		
+
+        if (title == null || title.equals("")) {
+            return Result.failure("Forum name must not be null or empty!");
+        }
+
         try(PreparedStatement p = c.prepareStatement(checkStatement)) {
             p.setString(1, title);
 
@@ -167,14 +167,14 @@ public class API implements APIProvider {
         } catch (SQLException e) {
             return Result.fatal(e.getMessage());
         }
-		
+
         final String insertStatement = "INSERT INTO Forum(title) VALUES (?)";
-		
-		try(PreparedStatement p = c.prepareStatement(insertStatement)) {
+
+        try(PreparedStatement p = c.prepareStatement(insertStatement)) {
             p.setString(1, title);
             p.executeUpdate();
             c.commit();
-			return Result.success();
+            return Result.success();
         } catch (SQLException e) {
             return Result.fatal(e.getMessage());
         }
@@ -182,7 +182,6 @@ public class API implements APIProvider {
 
     @Override
     public Result createPost(long topicId, String username, String text) {
-//        throw new UnsupportedOperationException("Not supported yet.");
         CreatePost cp = new CreatePost(c);
         return cp.run(topicId, username, text);
     }
@@ -196,31 +195,31 @@ public class API implements APIProvider {
     @Override
     public Result<ForumView> getForum(long id) {
         final String statement = "SELECT Forum.title AS fTitle, Topic.id AS tId, Topic.title AS tTitle FROM Forum LEFT JOIN Topic ON Forum.id = Topic.forum WHERE Forum.id = ?";
-		String forumTitle = null;
-		List<SimpleTopicSummaryView> topics = new ArrayList<SimpleTopicSummaryView>();
-		
+        String forumTitle = null;
+        List<SimpleTopicSummaryView> topics = new ArrayList<SimpleTopicSummaryView>();
+
         try(PreparedStatement p = c.prepareStatement(statement)) {
             p.setLong(1, id);
-			
-			try (ResultSet r = p.executeQuery()) {
-				if (!r.isBeforeFirst()) {
-					return Result.failure("Forum does not exist!");
-				}
-				
+
+            try (ResultSet r = p.executeQuery()) {
+                if (!r.isBeforeFirst()) {
+                    return Result.failure("Forum does not exist!");
+                }
+
                 while (r.next()) {
-					Long topicId = r.getLong("tId");
-					forumTitle = r.getString("fTitle");
-					String topicTitle = r.getString("tTitle");
-					
-					if (!r.wasNull()) {
-						SimpleTopicSummaryView topic = new SimpleTopicSummaryView(topicId, id, topicTitle);
-						topics.add(topic);
-					}
+                    Long topicId = r.getLong("tId");
+                    forumTitle = r.getString("fTitle");
+                    String topicTitle = r.getString("tTitle");
+
+                    if (!r.wasNull()) {
+                        SimpleTopicSummaryView topic = new SimpleTopicSummaryView(topicId, id, topicTitle);
+                        topics.add(topic);
+                    }
                 }
             }
-			
-			ForumView forum = new ForumView(id, forumTitle, topics);
-			return Result.success(forum);
+
+            ForumView forum = new ForumView(id, forumTitle, topics);
+            return Result.success(forum);
         } catch (SQLException e) {
             return Result.fatal(e.getMessage());
         }
@@ -233,37 +232,44 @@ public class API implements APIProvider {
 
     @Override
     public Result likeTopic(String username, long topicId, boolean like) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        LikeTopic lt = new LikeTopic(c);
+        return lt.run(username, topicId, like);
     }
 
     @Override
     public Result favouriteTopic(String username, long topicId, boolean fav) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        FavouriteTopic ft = new FavouriteTopic(c);
+        return ft.run(username, topicId, fav);
     }
 
     @Override
     public Result createTopic(long forumId, String username, String title, String text) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        CreateTopic ct = new CreateTopic(c);
+        return ct.run(forumId, username, title, text);
     }
 
     @Override
     public Result<List<AdvancedForumSummaryView>> getAdvancedForums() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        GetAdvancedForums gafs = new GetAdvancedForums(c);
+        return gafs.run();
     }
 
     @Override
     public Result<AdvancedPersonView> getAdvancedPersonView(String username) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        GetAdvancedPersonView gapv = new GetAdvancedPersonView(c);
+        return gapv.run(username);
     }
 
     @Override
     public Result<AdvancedForumView> getAdvancedForum(long id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        GetAdvancedForum gaf = new GetAdvancedForum(c);
+        return gaf.run(id);
     }
 
     @Override
     public Result likePost(String username, long topicId, int post, boolean like) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        LikePost lp = new LikePost(c);
+        return lp.run(username, topicId, post, like);
     }
 
    }
