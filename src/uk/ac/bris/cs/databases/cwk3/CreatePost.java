@@ -1,7 +1,7 @@
 package uk.ac.bris.cs.databases.cwk3;
 
 import java.sql.*;
-import java.util.Date;
+import java.time.Instant;
 import uk.ac.bris.cs.databases.api.Result;
 
 public class CreatePost {
@@ -32,9 +32,9 @@ public class CreatePost {
                     if (postNumber == 0) {
                         return Result.failure("That topic does not exist!");
                     }
-                    p.setString(1, username);
+                    p.setLong(1, userID);
                     p.setLong(2, topicID);
-                    p.setInt(3, (int) new Date().getTime());
+                    p.setLong(3, Instant.now().getEpochSecond());
                     p.setInt(4, postNumber + 1);
                     p.setString(5, text);
                     p.execute();
