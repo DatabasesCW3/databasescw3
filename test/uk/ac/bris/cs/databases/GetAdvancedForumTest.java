@@ -25,7 +25,7 @@ public class GetAdvancedForumTest extends TestBase {
         assertEquals(topic2.getTitle(), "testtopic 3");
         assertEquals(topic2.getLastPostTime(), 7);
         assertEquals(topic2.getPostCount(), 1);
-        assertEquals(topic2.getLikes(), 0);
+        assertEquals(topic2.getLikes(), 3);
         assertEquals(topic2.getCreated(), 7);
 
     }
