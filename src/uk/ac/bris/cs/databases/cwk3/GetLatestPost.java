@@ -16,13 +16,10 @@ public class GetLatestPost {
     private final String checkForExistingTopic = "SELECT *"
                                         + " FROM Topic"
                                         + " WHERE id = ?";
-    private final String statement = "SELECT *"
-                                    + " FROM Post "
-                                    + " JOIN Topic ON Post.topic = Topic.id"
-                                    + " JOIN Person ON Post.user = Person.id"
-                                    + " LEFT JOIN LikesPost ON Post.id = LikesPost.post"
-                                    + " WHERE topic = ?"
-                                    + " ORDER BY post.postedAt DESC";
+
+    private final String statement = "SELECT Person.name, Person.username, Topic.forum, Topic.id AS topic, Post.body, Post.postNumber, Post.postedAt, COUNT(LikesPost.id) AS likes FROM Post JOIN Topic ON Post.topic = Topic.id JOIN Person ON Post.user = Person.id LEFT JOIN LikesPost ON Post.id = LikesPost.post WHERE topic = ? ORDER BY Post.postedAt DESC";
+
+    PostView pw;
     GetLatestPost(Connection c) {
         this.c = c;
     }
@@ -31,23 +28,27 @@ public class GetLatestPost {
         try {
             boolean topicExists = checkForExistingTopic(topicID);
             if (!topicExists) {
+                System.out.println("TOPIC DOES NOT EXIST");
                 return Result.failure("Topic with that TopicID does not exist!");
             }
+            System.out.println("DOES EXIST");
         } catch (SQLException e) {
             Result.fatal(e.getMessage());
         }
 
         try(PreparedStatement p = c.prepareStatement(statement)) {
-            ResultSet results = p.executeQuery();
-            if (!results.isBeforeFirst()) {
-                return Result.failure("There are no posts in this topic!");
-            }
+            p.setLong(1, topicID);
+            try (ResultSet results = p.executeQuery()) {
+                if (!results.isBeforeFirst())
+                    return Result.failure("There are no posts in this topic!");
 
-            PostView pw = getPost(results);
+                pw = getPost(results);
+            }
 
             return Result.success(pw);
 
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             return Result.fatal(e.getMessage());
         }
     }
@@ -72,8 +73,9 @@ public class GetLatestPost {
     private boolean checkForExistingTopic(long topicID) throws SQLException {
         try(PreparedStatement p = c.prepareStatement(checkForExistingTopic)) {
             p.setLong(1, topicID);
-            ResultSet r = p.executeQuery();
-            return (r.isBeforeFirst());
+            try (ResultSet r = p.executeQuery()) {
+                return (r.isBeforeFirst());
+            }
         }
     }
 }

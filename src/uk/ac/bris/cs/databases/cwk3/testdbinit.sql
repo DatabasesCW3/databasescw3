@@ -46,3 +46,5 @@ INSERT INTO LikesPost VALUES(null, 1, 13);
 INSERT INTO LikesPost VALUES(null, 2, 14);
 INSERT INTO LikesPost VALUES(null, 1, 15);
 INSERT INTO LikesPost VALUES(null, 3, 1);
+INSERT INTO LikesPost VALUES(null, 1, 7);
+
